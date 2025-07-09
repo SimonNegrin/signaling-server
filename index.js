@@ -1,6 +1,9 @@
 import { WebSocketServer } from "ws"
+import { config as loadEnv } from 'dotenv'
 
-const port = 6100
+loadEnv()
+
+const port = parseInt(process.env.PORT) || 6100
 const rooms = new Map()
 const socketRooms = new WeakMap()
 const wss = new WebSocketServer({
