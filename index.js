@@ -39,8 +39,14 @@ wss.on("connection", (ws) => {
   })
 
   ws.on("close", () => {
+    log('Connection closed')
     const leaveRooms = socketRooms.get(ws)
     leaveRooms.forEach(room => {
+      room.connections.delete(ws)
+      if (room.connections.size === 0) {
+        rooms.delete(room.roomId)
+        log(`Room ID ${room.roomId} is empty so was deleted`)
+      }
       sendFrom(ws, room, { type: 'peerclose' })
     })
   })
@@ -58,6 +64,7 @@ function createroom(ws, message) {
   }
 
   const room = {
+    roomId,
     connections: new Set([ws]),
   }
 
