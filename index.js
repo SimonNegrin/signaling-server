@@ -14,6 +14,7 @@ const actions = {
   createroom,
   joinroom,
   broadcast,
+  ping,
 }
 
 wss.on('listening', () => {
@@ -115,6 +116,11 @@ function sendFrom(from, room, message) {
       ws.send(encoded)
     }
   })
+}
+
+function ping(ws, message) {
+  log('Ping received')
+  ws.send(JSON.stringify({ type: 'pong' }))
 }
 
 function log(...args) {
